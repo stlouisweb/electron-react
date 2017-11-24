@@ -1,0 +1,13 @@
+<head>
+  <title>Test</title>
+</head>
+<body>
+  <div id="app"></div>
+
+  <script>
+    const electron = require('electron');
+    const { ipcRenderer } = electron;
+    ipcRenderer.send('content:ready', '');
+    ipcRenderer.on('content:send', (content) => document.getElementById('app').innerHTML = 'the content');
+  </script>
+</body>
