@@ -5,30 +5,34 @@ import style from './style.css';
 class App extends Component {
   constructor(props) {
     super(props);
-    this.state = {}
+    this.state = {
+      text: ""
+    }
+    ipcRenderer.send('mainWindow:ready', '');
   }
 
-  componentWillMount() {
-    ipcRenderer.send('mainWindow:ready', "");
-    ipcRenderer.on('appState:send', (event, appState) => {
-      this.setState(appState);
+  componentDidMount() {
+    ipcRenderer.on('appState:changed', (event, state) => {
+      this.setState(state);
     });
-    ipcRenderer.on('appState:fetch', (event) => {
-      ipcRenderer.send('appState:recieved', this.state)
-    })
   }
 
-  handleTextChange = (event) => {
-    const text = event.target.value;
-    console.log(text);
-    this.setState({text: text});
+  handleClick = () => {
+    ipcRenderer.send('text:update', 'hello');
+  }
+
+  handleClear = () => {
+    ipcRenderer.send('text:update', '');
   }
 
   render() {
+    console.log(this.state.text);
     return (
       <div>
         <h2>Hello From React!</h2>
-        <input type='text' onChange={this.handleTextChange} value={this.state.text} />
+        {this.state.text}
+        <button onClick={this.handleClick}>push</button>
+        <button onClick={this.handleClear}>clear</button>
       </div>
     );
   }

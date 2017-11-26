@@ -1,28 +1,40 @@
 const electron = require('electron');
 const Store = require('electron-store');
+const redux = require('redux');
+const { createStore } = redux;
+const appStateReducer = require('./app/reducers');
+const actions = require('./app/actions');
 
 const { app, BrowserWindow, ipcMain } = electron;
 const appState = new Store({}, 'AppState');
 
 let mainWindow;
+console.log(appState.store);
+const initialState = appState.store;
+
+let store = createStore(appStateReducer, initialState);
 
 app.on('ready', () => {
   mainWindow = new BrowserWindow({
-    titleBarStyle: 'hidden',
     backgroundColor: '#69bbff'
   });
   mainWindow.loadURL(`file://${__dirname}/src/index.html`);
-  mainWindow.on('close', () => {
-    mainWindow.webContents.send('appState:fetch', '');
+
+  store.subscribe(() => {
+    mainWindow.webContents.send('appState:changed', store.getState());
   });
 });
 
-ipcMain.on('mainWindow:ready', (event) => {
-  mainWindow.webContents.send('appState:send', appState.store);
+app.on('before-quit', () => {
+  console.log(store.getState());
+  appState.store = store.getState();
 });
 
+ipcMain.on('mainWindow:ready', (event) => {
+  mainWindow.webContents.send('appState:changed', appState.store);
+//  mainWindow.webContents.send('appState:changed', store.getState());
+});
 
-
-ipcMain.on('appState:recieved', (event, state) => {
-  appState.store = state;
+ipcMain.on('text:update', (event, text) => {
+  store.dispatch(actions.updateText(text));
 });
