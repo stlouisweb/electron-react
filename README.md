@@ -12,7 +12,7 @@ You can find the [documentation for Electron here](https://electronjs.org/docs).
 
 The Electron specific code can be found in the `{project directory}/index.js` file and the `{project directory}/app` directory.
 
-This app uses electron-store to maintain application state between user sessions, and redux to manage state across browser windows (electron windows running the react app).
+This app uses [electron-store](https://github.com/sindresorhus/electron-store) to maintain application state between user sessions, and [redux](https://redux.js.org/) to manage state across browser windows (electron windows running the react app).
 
 The redux store is kept on the electron side and you can use Electron's interprocess communication to make a request from react to electron to either fetch state or dispatch an action.
 
