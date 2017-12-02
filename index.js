@@ -15,10 +15,18 @@ const initialState = appState.store;
 let store = createStore(appStateReducer, initialState);
 
 let mainWindow;
-
+let splash;
 app.on('ready', () => {
-  mainWindow = new BrowserWindow({
+  splash = new BrowserWindow({
+    width: 400,
+    height: 400,
+    frame: false,
     backgroundColor: '#69bbff'
+  });
+  splash.loadURL(`file://${__dirname}/src/loading.html`);
+  mainWindow = new BrowserWindow({
+    backgroundColor: '#69bbff',
+    show: false
   });
   mainWindow.loadURL(`file://${__dirname}/src/index.html`);
 
@@ -35,6 +43,11 @@ app.on('before-quit', () => {
 
 ipcMain.on('mainWindow:ready', (event) => {
   mainWindow.webContents.send('appState:changed', store.getState());
+});
+
+ipcMain.on('app:ready', (event) => {
+  mainWindow.show();
+  splash.destroy();
 });
 
 ipcMain.on('text:update', (event, text) => {

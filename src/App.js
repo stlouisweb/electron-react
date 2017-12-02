@@ -14,6 +14,7 @@ class App extends Component {
   componentDidMount() {
     ipcRenderer.on('appState:changed', (event, state) => {
       this.setState(state);
+      ipcRenderer.send('app:ready', '');
     });
   }
 
