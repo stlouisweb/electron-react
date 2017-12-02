@@ -6,13 +6,15 @@ const appStateReducer = require('./app/reducers');
 const actions = require('./app/actions');
 
 const { app, BrowserWindow, ipcMain } = electron;
+
 const appState = new Store({}, 'AppState');
+// initializes electron-store, by either reading from or
+// creating the AppState.json file on the users file system.
+
+const initialState = appState.store;
+let store = createStore(appStateReducer, initialState);
 
 let mainWindow;
-console.log(appState.store);
-const initialState = appState.store;
-
-let store = createStore(appStateReducer, initialState);
 
 app.on('ready', () => {
   mainWindow = new BrowserWindow({
@@ -24,15 +26,15 @@ app.on('ready', () => {
     mainWindow.webContents.send('appState:changed', store.getState());
   });
 });
-
 app.on('before-quit', () => {
   console.log(store.getState());
   appState.store = store.getState();
 });
 
+
+
 ipcMain.on('mainWindow:ready', (event) => {
-  mainWindow.webContents.send('appState:changed', appState.store);
-//  mainWindow.webContents.send('appState:changed', store.getState());
+  mainWindow.webContents.send('appState:changed', store.getState());
 });
 
 ipcMain.on('text:update', (event, text) => {
