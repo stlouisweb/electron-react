@@ -14,7 +14,8 @@ class App extends Component {
   componentDidMount() {
     ipcRenderer.on('appState:changed', (event, state) => {
       this.setState(state);
-      ipcRenderer.send('app:ready', '');
+      setTimeout(function() { ipcRenderer.send('app:ready', '') }, 2000); // remove setTimeout, it's for testing/demo purposes only.
+
     });
   }
 
