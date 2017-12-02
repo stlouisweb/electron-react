@@ -2,7 +2,7 @@
   "name": "dt",
   "version": "0.0.1",
   "description": "boilerplate for build desktop apps with electron, react and redux.",
-  "main": "index.js",
+  "main": "app/index.js",
   "homepage": "./",
   "scripts": {
     "electron": "electron .",

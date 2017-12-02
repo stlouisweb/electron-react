@@ -23,7 +23,7 @@ app.on('ready', () => {
     frame: false,
     backgroundColor: '#69bbff'
   });
-  splash.loadURL(`file://${__dirname}/src/loading.html`);
+  splash.loadURL(`file://${__dirname}/app/loading.html`);
   mainWindow = new BrowserWindow({
     backgroundColor: '#69bbff',
     show: false
