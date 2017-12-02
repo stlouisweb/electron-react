@@ -18,4 +18,4 @@ The redux store is kept on the electron side and you can use Electron's interpro
 
 ### React / Webpack
 [React documentation can be found here](https://reactjs.org/)
-The application uses a customized Webpack configuration, to facilitate access to the Electron app from the React app.
+The application uses a customized [Webpack](https://webpack.js.org/) configuration as opposed to [Create React App](https://github.com/facebookincubator/create-react-app), to facilitate access to the Electron app from the React app.
